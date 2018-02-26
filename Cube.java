@@ -1,3 +1,9 @@
+/**Written by: Akshar Sarvesh
+*Cube.java
+*AI that will scramble a cube and solve it using the beginners method.
+*Does this in 7 steps, as described in the body of the class.
+*/
+
 package RubiksCube;
 
 import java.util.ArrayList;
