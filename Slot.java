@@ -1,3 +1,11 @@
+/**Written by: Akshar Sarvesh
+*Slot.java
+*Stores data for a single piece on the cube
+*3 types-corner, edge, and center, so 3 constructors
+*Necessary for the cube
+*
+*/
+
 package RubiksCube;
 
 import java.util.Arrays;
