@@ -1,7 +1,5 @@
-/**Written by: Akshar Sarvesh
-*Cube.java
-*AI that will scramble a cube and solve it using the beginners method.
-*Does this in 7 steps, as described in the body of the class.
+/**Written By Akshar Sarvesh
+*This is an AI that will solve a Rubik's cube and output the results
 */
 
 package RubiksCube;
@@ -89,7 +87,298 @@ public class Cube {
 		
 	}
 	private static void middleEdges() {
-		// TODO Auto-generated method stub
+		Slot piece;
+		//Goes through all the edges
+		//Finds four edges
+		for(int a = 0; a<4;a++){
+			int face = 0;
+			//Stops itself once it hits a useful edge
+			
+			for(int j = 4;j<edges.size();j++){
+				
+				
+					Slot s = edges.get(j);
+					for(int i =0;i< s.getColor().length;i++){
+						if(s.getColor()[i]==6&&s.getColor()[i]!=3&&!s.isSolved()){
+							
+							//now it shouldn't try solving it again
+							s.solved();
+						
+					
+						
+							//makes sure it's not already solved
+							if(s.getCoordinates()[0]==1&&(s.getColor()[0]==cube[1][1][s.getCoordinates()[2]].getColor()[0])&&(s.getColor()[1]==cube[1][s.getCoordinates()[1]][1].getColor()[0])){
+								s.solved();
+							}
+							
+								//Start the s in the yellow face-then there are only two different cases
+								//in all of the ss of Interest, it finds 3 possibilities: its in the
+								//white face, in the middle layer, or in the yellow face
+										
+								//This is if it's in the white face
+								if(s.getCoordinates()[0]==1){
+										/**
+										* THIS IS THE LAST POINT I GOT TO
+										*/
+										//Now turn it up to the yellow face-first find the other coordinates
+										//If its on the L face
+										if(s.getCoordinates()[1]==0){
+											L2();
+											face = 2;
+											System.out.print("L2 ");
+										}
+										//R face
+										else if(s.getCoordinates()[1]==2){
+											R2();
+												face = 1;
+											System.out.print("R2 ");
+										}
+										//F or B?
+										else if(s.getCoordinates()[1]==1){
+											//F face
+											if(s.getCoordinates()[2]==0){
+												F2();
+												face = 4;
+												System.out.print("F2 ");
+											}
+											//B face
+											else if(s.getCoordinates()[2]==2){
+												B2();
+												face = 5;
+												System.out.print("B2 ");
+											}
+										}
+										//Now, any white edges in the white face are now in the yellow face
+									}
+									//Middle Layer?
+									if(s.getCoordinates()[0]==1){
+										//L face
+										if(s.getCoordinates()[1]==0){
+											//F/L edge
+											if(s.getCoordinates()[2]==0){
+												L();
+												Dprime();
+												Lprime();
+												D();
+												face = 2;
+												System.out.print("L D' L' D ");
+											}
+											//B/L face
+											else if(s.getCoordinates()[2]==2){
+												Lprime();
+												Dprime();
+												L();
+												D();
+												face = 2;
+												System.out.print("L' D' L D ");
+											}
+										}
+										//R face
+										else if(s.getCoordinates()[1]==2){
+											//F/R edge
+											if(s.getCoordinates()[2]==0){
+												Rprime();
+												Dprime();
+												R();
+												D();
+												face = 1;
+												System.out.print("R' D' R D ");
+											}
+											else if(s.getCoordinates()[2]==2){
+												R();
+												Dprime();
+												Rprime();
+												D();
+												face = 1;
+												System.out.print("R D' R' D ");
+											}
+										}
+									}
+									//Now any edge if the edge was in the middle layer it is now in the yellow face.
+									//Now, find orientation, then find the correct secondary face (red, orange, green, or blue), then insert the edge!
+									int Orientation = 0;
+									if(s.getColor()[0]==6){
+										Orientation = 1;
+									}
+									else if(s.getColor()[1] == 6){
+										Orientation=0;
+									}
+									
+									
+									//NOTE: The only way to do this is to hard code it, because the pieces don't reload their positions enough	
+									//This is, if the center directly above the current edge has the same color as the pieces second color
+									if(face ==0){
+										//this means it started and ended in the bottom layer, so face was never assigned
+										//L face
+										
+										if(s.getCoordinates()[1]==0){
+											face = 2;
+										}
+										//R face
+										else if(s.getCoordinates()[1]==2){
+											
+											face = 1;
+										}
+										//F or B face
+										else if(s.getCoordinates()[1]==1){
+											if(s.getCoordinates()[2]==0){
+												face = 4;
+											}
+											else if(s.getCoordinates()[2]==2){
+												face = 5;
+											}
+										}
+									}
+									
+									if(face ==1){
+										if(s.getColor()[Orientation]==1){
+											//already in correct spot, just stay there
+										}
+										else if(s.getColor()[Orientation]==4){
+											
+											Dprime();
+											System.out.print("D' ");
+											
+										}
+										else if(s.getColor()[Orientation]==2){
+											D2();
+											System.out.print("D2 ");
+										}
+										else if(s.getColor()[Orientation]==5){
+											D();
+											System.out.print("D ");
+										}
+									}	
+									else if(face ==4){
+										if(s.getColor()[Orientation]==1){
+											D();
+											System.out.print("D ");
+											
+										}
+										else if(s.getColor()[Orientation]==4){
+											//correct spot
+										}
+										else if(s.getColor()[Orientation]==2){
+											Dprime();
+											System.out.print("D' ");
+										}
+										else if(s.getColor()[Orientation]==5){
+											D2();
+											System.out.print("D2 ");
+										}
+									}
+									else if(face ==2){
+										if(s.getColor()[Orientation]==1){
+											D2();
+											System.out.print("D2 ");
+										}
+										else if(s.getColor()[Orientation]==4){
+											D();
+											System.out.print("D ");
+											
+										}
+										else if(s.getColor()[Orientation]==2){
+											//correct spot
+										}
+										else if(s.getColor()[Orientation]==5){
+											Dprime();
+											System.out.print("D' ");
+											
+										}
+									}
+									else if(face ==5){
+										if(s.getColor()[Orientation]==1){
+											Dprime();
+											System.out.print("D' ");
+										}
+										else if(s.getColor()[Orientation]==4){
+											D2();
+											System.out.print("D2 ");
+										}
+										else if(s.getColor()[Orientation]==2){
+											D();
+											System.out.print("D ");
+											
+											
+										}
+										else if(s.getColor()[Orientation]==5){
+											//correct spot
+										}
+									}
+									//After finding the correct face:
+									
+									//because it's essentially the same thing, I will copy/paste the code from before:
+									//L face
+									if(s.getColor()[Orientation]==2){
+										//if the secondary color is NOT on the yellow face
+										if(Orientation==1){
+											L2();
+											System.out.print("L2 ");
+										}
+										//but if it is...
+										else if(Orientation == 0){
+		
+											//quick trigger to get the s in the correct way
+											Lprime();
+											Uprime();
+											F();
+											U();
+											System.out.print("L' U' F U ");
+										}
+									}
+									//R face
+									else if(s.getColor()[Orientation]==1){
+										if(Orientation==1){
+											R2();
+											System.out.print("R2 ");
+										}
+										else if(Orientation ==0){
+											R();
+											U();
+											Fprime();
+											Uprime();
+											System.out.print("R U F' U' ");
+										}
+									}
+								
+									else if(s.getColor()[Orientation]==4){
+										//F face
+										if(Orientation==1){
+											F2();
+											System.out.print("F2 ");
+										}
+										else if(Orientation ==0){
+											Fprime();
+											Uprime();
+											R();
+											U();
+											System.out.print("F' U' R U ");
+										}
+									}
+										//B face
+									else if(s.getColor()[Orientation]==5){
+										if(Orientation==1){
+											B2();
+											System.out.print("B2 ");
+										}
+										else if(Orientation ==0){
+											Bprime();
+											Uprime();									
+											L();
+											U();
+											System.out.print("B' U' L U ");
+										}
+									}
+								
+									
+									//At this point, theoretically the cross should be done *crossing fingers
+								
+							}
+						}
+					}
+			
+		}
+		
 		
 	}
 	private static void bottomCorners() {
@@ -100,9 +389,9 @@ public class Cube {
 			int face = 0;
 			int face2=0;
 			//Stops itself once it hits a useful corners
-			boolean keepGoing = true;
+			
 			for(int j = 0;j<corners.size();j++){
-				if(keepGoing){
+				
 					Slot s = corners.get(j);
 					for(int i =0;i< s.getColor().length;i++){
 						//finds the corners with white
@@ -111,7 +400,7 @@ public class Cube {
 							s.solved();
 						}
 						if(s.getColor()[i]==6&&!s.isSolved()){
-							keepGoing = false;
+							s.solved();
 							
 							
 							//Start the corner in the yellow face-then there are only two different cases
@@ -386,7 +675,7 @@ public class Cube {
 					}
 				}
 			}
-		}
+		
 	}
 	private static void cross() {
 		Slot piece;
@@ -395,9 +684,9 @@ public class Cube {
 		for(int a = 0; a<4;a++){
 			int face = 0;
 			//Stops itself once it hits a useful edge
-			boolean keepGoing = true;
+			
 			for(int j = 0;j<edges.size();j++){
-				if(keepGoing){
+				
 					Slot s = edges.get(j);
 					for(int i =0;i< s.getColor().length;i++){
 						//finds the edges with white
@@ -406,8 +695,7 @@ public class Cube {
 							s.solved();
 						}
 						if(s.getColor()[i]==6&&!s.isSolved()){
-							keepGoing = false;
-							//now it shouldn't try solving it again
+							
 							s.solved();
 							//Start the s in the yellow face-then there are only two different cases
 						
@@ -672,7 +960,7 @@ public class Cube {
 					}
 				}
 			}
-		}
+		
 		
 		
 	}
