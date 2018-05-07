@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
 
+import javax.swing.JOptionPane;
+
 import apcs.Window;
 public class Cube {
 	static Slot[][][] cube;
@@ -17,7 +19,7 @@ public class Cube {
 	 * I couldn't get the file to work, but you can still
 	 * copy paste into it
 	 */
-	static Scanner s = new Scanner("D F2 L2 D' B2 U' B2 U2 B2 R2 D F' D' R U L2 R' F R2 F'");
+	static String scramble = JOptionPane.showInputDialog("What is your scramble? Please use all caps and apostrophes for prime turns");
 	static ArrayList<Slot> corners = new ArrayList<Slot>();
 	static ArrayList<Slot> edges = new ArrayList<Slot>();
 	static ArrayList<Slot> centers = new ArrayList<Slot>();
@@ -40,7 +42,7 @@ public class Cube {
 		scramble();
 		System.out.println();
 		draw();
-		//Window.wait(3.5);
+		Window.wait(3.5);
 		System.out.println("Solution:");
 		solve();
 		draw();
@@ -54,37 +56,398 @@ public class Cube {
 		System.out.println();
 		//Window.wait(2);
 		middleEdges();
-		System.out.println();
+		System.out.println("moo");
 		//Window.wait(2);
 		topCross();
 		System.out.println();
 		//Window.wait(2);
 		topFace();
 		System.out.println();
-		Window.wait(2);
-		//topEdges();
+		//Window.wait(2);
+		topEdges();
 		System.out.println();
-		Window.wait(2);
+		//Window.wait(2);
 		topCorners();
-		System.out.println();
-		Window.wait(2);
+		
 		
 	}
 	private static void topCorners() {
-		// TODO Auto-generated method stub
+		int countSolved = 0;
+		int pieceSolved=0;
+		Slot piece;
+		for(int j = 4;j<8;j++){
+			piece = corners.get(j);
+			if(piece.getColor()[1]==cube[1][1][piece.getCoordinates()[2]].getColor()[0]&&piece.getColor()[2]==cube[1][piece.getCoordinates()[1]][1].getColor()[0]){
+				pieceSolved = j-4;
+				countSolved++;
+			}
+				
+		}
+		
+		//either 0,1, or 4 are solved. here is if ONLY one is solved	
+		if(countSolved==1){
+			for(int i = 0;i<2;i++){
+				if(countSolved==1){
+					//based on which corner is solved, do a certain algorithm
+					if(pieceSolved==0){	
+						B2();
+						R2();
+						B();
+						L();
+						Bprime();
+						R2();
+						B();
+						Lprime();
+						B();
+						System.out.print("B2 R2 B L B' R2 B L' B ");
+					}
+					else if(pieceSolved==3){
+						F2();
+						L2();
+						F();
+						R();
+						Fprime();
+						L2();
+						F();
+						Rprime();
+						F();
+						System.out.print("F2 L2 F R F' L2 F R' F ");
+					}
+					if(pieceSolved==1){
+						R2();
+						F2();
+						R();
+						B();
+						Rprime();
+						F2();
+						R();
+						Bprime();
+						R();
+						System.out.print("R2 F2 R B R' F2 R B' R ");
+					}
+					if(pieceSolved==2){
+						L2();
+						B2();
+						L();
+						F();
+						Lprime();
+						B2();
+						L();
+						Fprime();
+						L();
+						System.out.print("L2 B2 L F L' B2 L F' L ");
+					}
+					countSolved=0;
+					for(int j = 4;j<8;j++){
+						piece = corners.get(j);
+						if(piece.getColor()[1]==cube[1][1][piece.getCoordinates()[2]].getColor()[0]&&piece.getColor()[2]==cube[1][piece.getCoordinates()[1]][1].getColor()[0]){
+							pieceSolved = j-4;
+							countSolved++;
+						}
+							
+					}
+				}	
+				
+			}
+		}	
+		//this means it is an E-perm or an H-perm
+		else if(countSolved ==0){
+			//E-perm going left to right
+			if(cube[2][0][0].getColor()[2]==cube[1][1][0].getColor()[0]&&cube[2][0][0].getColor()[1]==cube[1][2][1].getColor()[0]){
+				F();
+				Lprime();
+				Fprime();
+				R();
+				F();
+				L();
+				Fprime();
+				Rprime();
+				F();
+				L();
+				Fprime();
+				R();
+				F();
+				Lprime();
+				Fprime();
+				Rprime();
+				System.out.print("F L' F' R' F L F' R' F L F' R F L' F' R' ");
+			}
+			else if(cube[2][0][0].getColor()[1]==cube[1][1][2].getColor()[0]&&cube[2][0][0].getColor()[2]==cube[1][2][1].getColor()[0]){
+				//just two e-perms
+				F();
+				Lprime();
+				Fprime();
+				R();
+				F();
+				L();
+				Fprime();
+				Rprime();
+				F();
+				L();
+				Fprime();
+				R();
+				F();
+				Lprime();
+				Fprime();
+				Fprime();
+				Rprime();
+				B();
+				R();
+				F();
+				Rprime();
+				Bprime();
+				R();
+				F();
+				Rprime();
+				B();
+				R();
+				Fprime();
+				Rprime();
+				Bprime();
+				System.out.print("F L' F' R' F L F' R' F L F' R F L' F' F' R' B R F R' B' R F R' B R F' R' B' ");
+				
+			}
+			else{
+				R();
+				Fprime();
+				Rprime();
+				B();
+				R();
+				F();
+				Rprime();
+				Bprime();
+				R();
+				F();
+				Rprime();
+				B();
+				R();
+				Fprime();
+				Rprime();
+				Bprime();
+				System.out.print(" R F' R' B R F R' B' R F R' B R F' R' B' ");
+			}
+			
+		}
+	//if it's 4, no need to worry-the Cube is SOVLED!!!!
 		
 	}
 	private static void topEdges() {
-		int[] countNonSolved = {0,0,0,0};
-		boolean isSolved = false;
-		Slot s = null;
-		while(!isSolved){
-			for(int i = 8;i<12;i++){
-				s=edges.get(i);
-				//if(s.getCoordinates()[2]==)
+		
+		//This counts how much each edges needs to do a "D" move to solve
+		int[] numberOfTurns = {0,0,0,0};
+		numberOfTurns=edgeTurns(numberOfTurns);
+		//now that we have a finished array,let's analyze
+		//this nested for loop will find a point where exactly one edge is solved.
+		//After this, it will just cycle the remaining three edges to solve them too!
+		boolean solved = false;
+		for(int i = 0;i<3;i++){
+			
+			int countSolved = 0;
+			for(int j = 0;j<4;j++){
+				
+				if(numberOfTurns[j]==0){
+					countSolved++;
+				}
+			}
+			//countSolved will NEVER = 3 because if 3 edges are solved,
+			//the last one by definition is also solved
+			
+			if(countSolved==1){
+				//nothing to do here, just move to the next step.
+				break;
+			}
+			else if(countSolved==2||countSolved==0){
+				D();
+				System.out.print("D ");
+				for(int j = 0;j<4;j++){
+					//makes everything decrement except for 0, which goes to 3
+					numberOfTurns[j]=(numberOfTurns[j]+3)%4;
+				}
+			}
+			//now it goes back and checks again
+			else if (countSolved==4){
+				solved = true;
+				break;
 			}
 		}
+		//Finally, do the last turns
+		numberOfTurns=edgeTurns(numberOfTurns);
 		
+			
+		if(numberOfTurns[0]==0){
+			for(int i = 0;i<2;i++){
+				if(!isSolved(numberOfTurns)){	
+					B();
+					D();
+					Bprime();
+					Dprime();
+					Fprime();
+					Dprime();
+					F();
+					D2();
+					B();
+					Dprime();
+					Bprime();
+					Dprime();
+					Fprime();
+					D();
+					F();
+					System.out.print("B D B' D' F' D' F D2 B D' B' D' F' D F ");
+					numberOfTurns=edgeTurns(numberOfTurns);
+				}
+				else{
+					break;
+				}
+			}
+		}
+		else if(numberOfTurns[1]==0){
+			for(int i = 0;i<2;i++){
+				if(!isSolved(numberOfTurns)){
+					L();
+					D();
+					Lprime();
+					Dprime();
+					Rprime();
+					Dprime();
+					R();
+					D2();
+					L();
+					Dprime();
+					Lprime();
+					Dprime();
+					Rprime();
+					D();
+					R();
+					System.out.print("L D L' D' R' D' R D2 L D' L' D' R' D R ");
+					numberOfTurns=edgeTurns(numberOfTurns);
+				}
+				else{
+					break;
+				}
+			}
+		}
+		else if(numberOfTurns[2]==0){
+			for(int i = 0;i<2;i++){
+				if(!isSolved(numberOfTurns)){
+					R();
+					D();
+					Rprime();
+					Dprime();
+					Lprime();
+					Dprime();
+					L();
+					D2();
+					R();
+					Dprime();
+					Rprime();
+					Dprime();
+					Lprime();
+					D();
+					L();
+					System.out.print("R D R' D' L' D' L D2 R D' R' D' L' D L ");
+				}
+				else{
+					break;
+				}
+			}
+		}
+		else if(numberOfTurns[3]==0){
+			for(int i = 0;i<2;i++){
+				if(!isSolved(numberOfTurns)){
+					F();
+					D();
+					Fprime();
+					Dprime();
+					Bprime();
+					Dprime();
+					B();
+					D2();
+					F();
+					Dprime();
+					Fprime();						
+					Dprime();
+					Bprime();
+					D();
+					B();
+					System.out.print("F D F' D' B' D' B D2 F D' F' D' B' D B ");
+					numberOfTurns=edgeTurns(numberOfTurns);
+				}
+				else{
+					break;
+				}
+			}
+		}
+	
+	}
+	//just a helper method for the top edges method
+	private static boolean isSolved(int[] edges){
+		edges=edgeTurns(edges);
+		return edges[0]==0&&edges[1]==0&&edges[2]==0&&edges[3]==0;
+	}
+	private static int[] edgeTurns(int[] numberOfTurns){
+		for(int j =8;j<edges.size();j++){
+			if(edges.get(j).getColor()[1]==1){
+				if(cube[1][edges.get(j).getCoordinates()[1]][edges.get(j).getCoordinates()[2]].getColor()[0]==1){
+					//red on red is fine
+					numberOfTurns[j-8]=0;
+				}
+				else if(cube[1][edges.get(j).getCoordinates()[1]][edges.get(j).getCoordinates()[2]].getColor()[0]==2){
+					numberOfTurns[j-8]=2;
+				}
+				else if(cube[1][edges.get(j).getCoordinates()[1]][edges.get(j).getCoordinates()[2]].getColor()[0]==4){
+					//from green, it's one "D" to get to Red
+					numberOfTurns[j-8]=1;
+				}
+				else if(cube[1][edges.get(j).getCoordinates()[1]][edges.get(j).getCoordinates()[2]].getColor()[0]==5){
+					//from Blue its 3 "D"s to get to Red
+					numberOfTurns[j-8]=3;
+				}
+			}
+			//The rest is the same just with different colors
+			else if(edges.get(j).getColor()[1]==2){
+				if(cube[1][edges.get(j).getCoordinates()[1]][edges.get(j).getCoordinates()[2]].getColor()[0]==1){
+					numberOfTurns[j-8]=2;
+				}
+				else if(cube[1][edges.get(j).getCoordinates()[1]][edges.get(j).getCoordinates()[2]].getColor()[0]==2){
+					numberOfTurns[j-8]=0;
+				}
+				else if(cube[1][edges.get(j).getCoordinates()[1]][edges.get(j).getCoordinates()[2]].getColor()[0]==4){
+					numberOfTurns[j-8]=3;
+				}
+				else if(cube[1][edges.get(j).getCoordinates()[1]][edges.get(j).getCoordinates()[2]].getColor()[0]==5){
+					numberOfTurns[j-8]=1;
+				}
+			}
+			else if(edges.get(j).getColor()[1]==4){
+				if(cube[1][edges.get(j).getCoordinates()[1]][edges.get(j).getCoordinates()[2]].getColor()[0]==1){
+					numberOfTurns[j-8]=3;
+				}
+				else if(cube[1][edges.get(j).getCoordinates()[1]][edges.get(j).getCoordinates()[2]].getColor()[0]==2){
+					numberOfTurns[j-8]=1;
+				}
+				else if(cube[1][edges.get(j).getCoordinates()[1]][edges.get(j).getCoordinates()[2]].getColor()[0]==4){
+					numberOfTurns[j-8]=0;
+				}
+				else if(cube[1][edges.get(j).getCoordinates()[1]][edges.get(j).getCoordinates()[2]].getColor()[0]==5){
+					numberOfTurns[j-8]=2;
+				}
+			}
+			else if(edges.get(j).getColor()[1]==5){
+				if(cube[1][edges.get(j).getCoordinates()[1]][edges.get(j).getCoordinates()[2]].getColor()[0]==1){
+					numberOfTurns[j-8]=1;
+				}
+				else if(cube[1][edges.get(j).getCoordinates()[1]][edges.get(j).getCoordinates()[2]].getColor()[0]==2){
+					numberOfTurns[j-8]=3;
+				}
+				else if(cube[1][edges.get(j).getCoordinates()[1]][edges.get(j).getCoordinates()[2]].getColor()[0]==4){
+					numberOfTurns[j-8]=2;
+				}
+				else if(cube[1][edges.get(j).getCoordinates()[1]][edges.get(j).getCoordinates()[2]].getColor()[0]==5){
+					numberOfTurns[j-8]=0;
+				}
+			}
+		}
+		return numberOfTurns;
 	}
 	private static void topFace() {
 		int countNonYellows = 4;
@@ -114,6 +477,7 @@ public class Cube {
 				L();
 				D2();
 				Lprime();
+				System.out.print("L D L' D L D2 L' ");
 				
 			}
 			if(countNonYellows==3){
@@ -129,6 +493,7 @@ public class Cube {
 				L();
 				D2();
 				Lprime();
+				System.out.print("L D L' D L D2 L' ");
 			}
 		}
 		
@@ -155,6 +520,7 @@ public class Cube {
 				Dprime();
 				Lprime();
 				Fprime();
+				System.out.print("F D L D' L' F' ");
 				countNonYellows=2;
 				
 			}
@@ -170,6 +536,7 @@ public class Cube {
 				Dprime();
 				Lprime();
 				Fprime();
+				System.out.print("F D L D' L' F' ");
 			}
 		}
 	}
@@ -1070,8 +1437,9 @@ public class Cube {
 	}
 	private static void scramble() {
 		String move = "";
-		while(s.hasNext()){
-			move = s.next();
+		String[] moves = scramble.split(" ");
+		for(int i = 0;i<moves.length;i++){
+			move = moves[i];
 			switch(move){
 				case "R":
 					R();
@@ -1164,7 +1532,6 @@ public class Cube {
 		refreshList();
 		
 	}
-	
 	private static void Uprime() {
 		U();
 		U();
@@ -1193,7 +1560,6 @@ public class Cube {
 		draw();
 		refreshList();
 	}
-	
 	private static void Bprime() {
 		B();B();B();
 		
