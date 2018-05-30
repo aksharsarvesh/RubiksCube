@@ -13,12 +13,6 @@ import javax.swing.JOptionPane;
 import apcs.Window;
 public class Cube {
 	static Slot[][][] cube;
-	/** VERY IMPORTANT
-	 * THE STRING YOU ENTER INTO THE SCANNER RIGHT BELOW THIS
-	 * IS WHAT THE CUBE WILL DO. MAKE SURE YOU HAVE SPACES
-	 * I couldn't get the file to work, but you can still
-	 * copy paste into it
-	 */
 	static String scramble = JOptionPane.showInputDialog("What is your scramble? Please use all caps and apostrophes for prime turns");
 	static ArrayList<Slot> corners = new ArrayList<Slot>();
 	static ArrayList<Slot> edges = new ArrayList<Slot>();
