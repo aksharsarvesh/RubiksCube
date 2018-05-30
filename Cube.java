@@ -34,10 +34,7 @@ public class Cube {
 		//Start with a solved cube
 		start();
 		draw();
-		//Uprime();
-		//draw();
-		//D();
-		//draw();
+		//Scramble, wait, then solve
 		System.out.println("Scramble:");
 		scramble();
 		System.out.println();
@@ -49,24 +46,26 @@ public class Cube {
 		
 	}
 	private static void solve() {
+		//Step by step solution
+		System.out.println("\nWhite Cross:");
 		cross();
-		System.out.println();
-		//Window.wait(2);
+		System.out.println("\nWhite Corners");
+		Window.wait(2);
 		bottomCorners();
-		System.out.println();
-		//Window.wait(2);
+		System.out.println("\nMiddle Layer Edges:");
+		Window.wait(2);
 		middleEdges();
-		System.out.println("moo");
-		//Window.wait(2);
+		System.out.println("\nYellow Cross:");
+		Window.wait(2);
 		topCross();
-		System.out.println();
-		//Window.wait(2);
+		System.out.println("\nYellow Face:");
+		Window.wait(2);
 		topFace();
-		System.out.println();
-		//Window.wait(2);
+		System.out.println("\nPermutation of Last Layer Edges:");
+		Window.wait(2);
 		topEdges();
-		System.out.println();
-		//Window.wait(2);
+		System.out.println("\nPermutation of Last Layer Corners:");
+		Window.wait(2);
 		topCorners();
 		
 		
@@ -232,159 +231,162 @@ public class Cube {
 		
 	}
 	private static void topEdges() {
-		
-		//This counts how much each edges needs to do a "D" move to solve
-		int[] numberOfTurns = {0,0,0,0};
-		numberOfTurns=edgeTurns(numberOfTurns);
-		//now that we have a finished array,let's analyze
-		//this nested for loop will find a point where exactly one edge is solved.
-		//After this, it will just cycle the remaining three edges to solve them too!
-		boolean solved = false;
-		for(int i = 0;i<3;i++){
-			
-			int countSolved = 0;
-			for(int j = 0;j<4;j++){
+		for(int k = 0;k<2;k++){
+			//This counts how much each edges needs to do a "D" move to solve
+			int[] numberOfTurns = {0,0,0,0};
+			numberOfTurns=edgeTurns(numberOfTurns);
+			//now that we have a finished array,let's analyze
+			//this nested for loop will find a point where exactly one edge is solved.
+			//After this, it will just cycle the remaining three edges to solve them too!
+			boolean solved = false;
+			for(int i = 0;i<3;i++){
 				
-				if(numberOfTurns[j]==0){
-					countSolved++;
-				}
-			}
-			//countSolved will NEVER = 3 because if 3 edges are solved,
-			//the last one by definition is also solved
-			
-			if(countSolved==1){
-				//nothing to do here, just move to the next step.
-				break;
-			}
-			else if(countSolved==2||countSolved==0){
-				D();
-				System.out.print("D ");
+				int countSolved = 0;
 				for(int j = 0;j<4;j++){
-					//makes everything decrement except for 0, which goes to 3
-					numberOfTurns[j]=(numberOfTurns[j]+3)%4;
+					
+					if(numberOfTurns[j]==0){
+						countSolved++;
+					}
+				}
+				//countSolved will NEVER = 3 because if 3 edges are solved,
+				//the last one by definition is also solved
+				//we want one to be solved so we can cycle the other 3
+				if(countSolved==1){
+					//nothing to do here, just move to the next step.
+					break;
+				}
+				//there is always a case where 
+				else if(countSolved==2||countSolved==0){
+					D();
+					System.out.print("D ");
+					for(int j = 0;j<4;j++){
+						//makes everything decrement except for 0, which goes to 3
+						numberOfTurns[j]=(numberOfTurns[j]+3)%4;
+					}
+				}
+				//now it goes back and checks again
+				else if (countSolved==4){
+					solved = true;
+					break;
 				}
 			}
-			//now it goes back and checks again
-			else if (countSolved==4){
-				solved = true;
-				break;
-			}
-		}
-		//Finally, do the last turns
-		numberOfTurns=edgeTurns(numberOfTurns);
-		
+			//Finally, do the last turns
+			numberOfTurns=edgeTurns(numberOfTurns);
 			
-		if(numberOfTurns[0]==0){
-			for(int i = 0;i<2;i++){
-				if(!isSolved(numberOfTurns)){	
-					B();
-					D();
-					Bprime();
-					Dprime();
-					Fprime();
-					Dprime();
-					F();
-					D2();
-					B();
-					Dprime();
-					Bprime();
-					Dprime();
-					Fprime();
-					D();
-					F();
-					System.out.print("B D B' D' F' D' F D2 B D' B' D' F' D F ");
-					numberOfTurns=edgeTurns(numberOfTurns);
+			
+			if(numberOfTurns[0]==0){
+				for(int i = 0;i<2;i++){
+					if(!isSolved(numberOfTurns)){	
+						B();
+						D();
+						Bprime();
+						Dprime();
+						Fprime();
+						Dprime();
+						F();
+						D2();
+						B();
+						Dprime();
+						Bprime();
+						Dprime();
+						Fprime();
+						D();
+						F();
+						System.out.print("B D B' D' F' D' F D2 B D' B' D' F' D F ");
+						numberOfTurns=edgeTurns(numberOfTurns);
+					}
+					else{
+						break;
+					}
 				}
-				else{
-					break;
+			}
+			else if(numberOfTurns[1]==0){
+				for(int i = 0;i<2;i++){
+					if(!isSolved(numberOfTurns)){
+						L();
+						D();
+						Lprime();
+						Dprime();
+						Rprime();
+						Dprime();
+						R();
+						D2();
+						L();
+						Dprime();
+						Lprime();
+						Dprime();
+						Rprime();
+						D();
+						R();
+						System.out.print("L D L' D' R' D' R D2 L D' L' D' R' D R ");
+						numberOfTurns=edgeTurns(numberOfTurns);
+					}
+					else{
+						break;
+					}
+				}
+			}
+			else if(numberOfTurns[2]==0){
+				for(int i = 0;i<2;i++){
+					if(!isSolved(numberOfTurns)){
+						R();
+						D();
+						Rprime();
+						Dprime();
+						Lprime();
+						Dprime();
+						L();
+						D2();
+						R();
+						Dprime();
+						Rprime();
+						Dprime();
+						Lprime();
+						D();
+						L();
+						System.out.print("R D R' D' L' D' L D2 R D' R' D' L' D L ");
+					}
+					else{
+						break;
+					}
+				}
+			}
+			else if(numberOfTurns[3]==0){
+				for(int i = 0;i<2;i++){
+					if(!isSolved(numberOfTurns)){
+						F();
+						D();
+						Fprime();
+						Dprime();
+						Bprime();
+						Dprime();
+						B();
+						D2();
+						F();
+						Dprime();
+						Fprime();						
+						Dprime();
+						Bprime();
+						D();
+						B();
+						System.out.print("F D F' D' B' D' B D2 F D' F' D' B' D B ");
+						numberOfTurns=edgeTurns(numberOfTurns);
+					}
+					else{
+						break;
+					}
 				}
 			}
 		}
-		else if(numberOfTurns[1]==0){
-			for(int i = 0;i<2;i++){
-				if(!isSolved(numberOfTurns)){
-					L();
-					D();
-					Lprime();
-					Dprime();
-					Rprime();
-					Dprime();
-					R();
-					D2();
-					L();
-					Dprime();
-					Lprime();
-					Dprime();
-					Rprime();
-					D();
-					R();
-					System.out.print("L D L' D' R' D' R D2 L D' L' D' R' D R ");
-					numberOfTurns=edgeTurns(numberOfTurns);
-				}
-				else{
-					break;
-				}
-			}
-		}
-		else if(numberOfTurns[2]==0){
-			for(int i = 0;i<2;i++){
-				if(!isSolved(numberOfTurns)){
-					R();
-					D();
-					Rprime();
-					Dprime();
-					Lprime();
-					Dprime();
-					L();
-					D2();
-					R();
-					Dprime();
-					Rprime();
-					Dprime();
-					Lprime();
-					D();
-					L();
-					System.out.print("R D R' D' L' D' L D2 R D' R' D' L' D L ");
-				}
-				else{
-					break;
-				}
-			}
-		}
-		else if(numberOfTurns[3]==0){
-			for(int i = 0;i<2;i++){
-				if(!isSolved(numberOfTurns)){
-					F();
-					D();
-					Fprime();
-					Dprime();
-					Bprime();
-					Dprime();
-					B();
-					D2();
-					F();
-					Dprime();
-					Fprime();						
-					Dprime();
-					Bprime();
-					D();
-					B();
-					System.out.print("F D F' D' B' D' B D2 F D' F' D' B' D B ");
-					numberOfTurns=edgeTurns(numberOfTurns);
-				}
-				else{
-					break;
-				}
-			}
-		}
-	
 	}
 	//just a helper method for the top edges method
 	private static boolean isSolved(int[] edges){
+		//simple use of the previous method to see if it's already solved
 		edges=edgeTurns(edges);
 		return edges[0]==0&&edges[1]==0&&edges[2]==0&&edges[3]==0;
 	}
 	private static int[] edgeTurns(int[] numberOfTurns){
+		//Don't worry about this, it's just to help the next methods find which pieces need to go where
 		for(int j =8;j<edges.size();j++){
 			if(edges.get(j).getColor()[1]==1){
 				if(cube[1][edges.get(j).getCoordinates()[1]][edges.get(j).getCoordinates()[2]].getColor()[0]==1){
@@ -458,16 +460,18 @@ public class Cube {
 					countNonYellows++;
 				}	
 			}
-		
+			//again, if all 4 corners are yellow, it's solved
 			if(countNonYellows==0){
 				//nothing to do here!
 				break;
 			}
-			
+			//either 2, 3, or 4 are not yellow-we want it to get to 3 so we can do one move to solve it.
 			else if(countNonYellows==2||countNonYellows==4){
 				for(int i = 0; i< 4;i++){
+					//find the sweetspot
 					if(cube[2][0][0].getColor()[1]!=3){
 						Dprime();
+						System.out.print("D' ");
 					}
 				}
 				L();
@@ -482,8 +486,10 @@ public class Cube {
 			}
 			if(countNonYellows==3){
 				for(int i = 0; i< 4;i++){
+					//find the sweetspot
 					if(cube[2][2][0].getColor()[0]!=3){
 						Dprime();
+						System.out.print("D' ");
 					}
 				}
 				L();
@@ -507,12 +513,12 @@ public class Cube {
 					countNonYellows++;
 				}	
 			}
-			
+			//if there are 0 non yellows, the yellow cross is already solved
 			if(countNonYellows==0){
 				//nothing to do here!
 				break;
 			}
-			
+			//if it's 4, then just do one edge algorithm and move on
 			else if(countNonYellows==4){
 				F();
 				D();
@@ -524,12 +530,16 @@ public class Cube {
 				countNonYellows=2;
 				
 			}
+			//now either it's solved or there are two left: adjacent or opposite
 			if(countNonYellows==2){
 				for(int i = 0; i< 4;i++){
+					//find the sweetspot to execute
 					if(cube[2][2][1].getColor()[0]!=3||cube[2][1][0].getColor()[0]==3){
 						Dprime();
+						System.out.print("D' ");
 					}
 				}
+				//execute, but it may not yet be solved, so go back and do it again.
 				F();
 				D();
 				L();
