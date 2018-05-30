@@ -273,7 +273,7 @@ public class Cube {
 			//Finally, do the last turns
 			numberOfTurns=edgeTurns(numberOfTurns);
 			
-			
+			//just case by case based on which edge is solved
 			if(numberOfTurns[0]==0){
 				for(int i = 0;i<2;i++){
 					if(!isSolved(numberOfTurns)){	
