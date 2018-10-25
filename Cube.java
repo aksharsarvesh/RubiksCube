@@ -450,8 +450,10 @@ public class Cube {
 		while(countNonYellows>0){
 			countNonYellows=0;
 			for(int j = 4;j<corners.size();j++){
+				System.out.println(corners.get(j).getColor()[0]);
 				if(corners.get(j).getColor()[0]!=3){
 					countNonYellows++;
+					System.out.println("yay");
 				}	
 			}
 			//again, if all 4 corners are yellow, it's solved
@@ -460,9 +462,33 @@ public class Cube {
 				break;
 			}
 			//either 2, 3, or 4 are not yellow-we want it to get to 3 so we can do one move to solve it.
-			else if(countNonYellows==2||countNonYellows==4){
+			else if(countNonYellows==2){
+				//No idea how or why this situational case came up, but
+				//when the corners are chameleon case
+				//(two adjacent corners with the yellows facing in opposite directions)
+				//it goes into an infinite loop-this minor change does not affect 
+				//any other case, so nowit should work! lol I had my scramble as R' 
+				//to see how bad the AI was and it actually did not solve
 				for(int i = 0; i< 4;i++){
-					//find the sweetspot
+					//find the sweet spot
+					if(cube[2][2][0].getColor()[1]!=3){
+						Dprime();
+						System.out.print("D' ");
+					}
+				}
+				L();
+				D();
+				Lprime();
+				D();
+				L();
+				D2();
+				Lprime();
+				System.out.print("L D L' D L D2 L' ");
+				
+			}
+			else if(countNonYellows==4){
+				for(int i = 0; i< 4;i++){
+					//find the sweet spot
 					if(cube[2][0][0].getColor()[1]!=3){
 						Dprime();
 						System.out.print("D' ");
