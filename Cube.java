@@ -5,8 +5,7 @@
 package RubiksCube;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Scanner;
+
 
 import javax.swing.JOptionPane;
 
@@ -232,7 +231,7 @@ public class Cube {
 			//now that we have a finished array,let's analyze
 			//this nested for loop will find a point where exactly one edge is solved.
 			//After this, it will just cycle the remaining three edges to solve them too!
-			boolean solved = false;
+			
 			for(int i = 0;i<3;i++){
 				
 				int countSolved = 0;
@@ -260,7 +259,6 @@ public class Cube {
 				}
 				//now it goes back and checks again
 				else if (countSolved==4){
-					solved = true;
 					break;
 				}
 			}
@@ -659,7 +657,6 @@ public class Cube {
 							}
 						}
 					}
-					int Orientation=0;
 					//Now any edge if the edge was in the middle layer it is now in the yellow face.
 					if(face ==0){
 						//this means it started and ended in the bottom layer, so face was never assigned
@@ -883,7 +880,6 @@ public class Cube {
 		
 	}
 	private static void bottomCorners() {
-		Slot piece;
 		//Goes through all the corner
 		//Finds four corners
 		for(int a = 0; a<4;a++){
@@ -1179,7 +1175,6 @@ public class Cube {
 		
 	}
 	private static void cross() {
-		Slot piece;
 		//Goes through all the edges
 		//Finds four edges
 		for(int a = 0; a<4;a++){
