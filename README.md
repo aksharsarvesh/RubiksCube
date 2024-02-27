@@ -6,3 +6,5 @@ Running Cube.java will prompt a scramble. It can be given in a number of formats
 This scramble will be performed as if the white face is on top and green is in front.
 
 Then, using the beginner's method, it will solve the cube and output the solution.
+
+Slot.java is used for storing positional and color data on each piece of the cube, and Window.java is purely for drawing the cube.
